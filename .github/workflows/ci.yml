@@ -4,32 +4,26 @@ on: [pull_request]
 
 jobs:
   run-ci:
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     name: Run Type Check & Linters
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
+          cache: npm
 
       - name: Install Dependencies
-        uses: borales/actions-yarn@v2.1.0
-        with:
-          cmd: install
+        run: npm ci
 
       - name: Build Project
-        uses: borales/actions-yarn@v2.1.0
-        with:
-          cmd: build
+        run: npm run build
 
       - name: Check commits messages
         uses: wagoid/commitlint-github-action@v5
